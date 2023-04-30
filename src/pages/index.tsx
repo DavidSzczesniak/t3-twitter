@@ -1,4 +1,4 @@
-import { SignIn, SignInButton, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 
 import { api } from "~/utils/api";
@@ -102,16 +102,12 @@ const Home: NextPage = () => {
   return (
     <>
       <PageLayout>
-        <div className="flex border-b border-slate-400 p-4">
-          {!isSignedIn && (
-            <div className="flex justify-center">
-              <SignInButton />
-            </div>
-          )}
-          {isSignedIn && <CreatePostWizard />}
-        </div>
+        {isSignedIn && (
+          <div className="flex border-b border-slate-400 p-4">
+            <CreatePostWizard />
+          </div>
+        )}
         <Feed />
-        <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
       </PageLayout>
     </>
   );

@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^4.15.0",
+    "@mantine/core": "^6.0.9",
+    "@mantine/hooks": "^6.0.9",
     "@prisma/client": "^4.11.0",
     "@tanstack/react-query": "^4.28.0",
     "@trpc/client": "^10.18.0",
