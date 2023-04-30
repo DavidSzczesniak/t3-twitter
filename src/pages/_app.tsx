@@ -49,6 +49,7 @@ const UserInfo = () => {
       <Popover.Dropdown className="border-slate-400 bg-black p-0 py-2">
         <ol ref={ref}>
           <li
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onClick={() => signOut()}
             className="cursor-pointer p-2 transition hover:bg-slate-600"
           >
