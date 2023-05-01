@@ -33,7 +33,7 @@ const UserInfo = () => {
     >
       <Popover.Target>
         <div
-          className="flex cursor-pointer items-center justify-between gap-4 rounded-full transition hover:bg-slate-600"
+          className="flex cursor-pointer items-center justify-between gap-4 rounded-full transition hover:bg-slate-800"
           onClick={() => setOpened(!opened)}
         >
           <span className="text-md ml-4 font-bold">{user.username}</span>

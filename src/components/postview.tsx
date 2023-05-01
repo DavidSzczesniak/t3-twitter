@@ -4,16 +4,27 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 dayjs.extend(relativeTime);
 
 type PostWithUser = RouterOutputs["posts"]["getAll"][number];
 
-export const PostView = (props: PostWithUser) => {
-  const { post, author } = props;
+interface PostContentProps {
+  data: PostWithUser;
+  isPostPage?: boolean;
+}
+
+const PostContent = ({ data, isPostPage = false }: PostContentProps) => {
+  const { post, author } = data;
 
   return (
-    <div key={post.id} className="flex gap-3 border-b border-slate-400 p-4">
+    <div
+      key={post.id}
+      className={`flex gap-3 border-b border-slate-400 p-4 ${
+        !isPostPage ? "transition hover:bg-slate-800" : ""
+      }`}
+    >
       <Link href={`/@${author.username}`}>
         <Image
           src={author.profileImageUrl}
@@ -38,5 +49,20 @@ export const PostView = (props: PostWithUser) => {
         <span className="text-2xl">{post.content}</span>
       </div>
     </div>
+  );
+};
+
+export const PostView = (props: PostWithUser) => {
+  const router = useRouter();
+  const isPostPage = router.pathname === "/post/[id]";
+
+  if (isPostPage) {
+    return <PostContent data={props} isPostPage />;
+  }
+
+  return (
+    <Link href={`/post/${props.post.id}`}>
+      <PostContent data={props} />
+    </Link>
   );
 };
