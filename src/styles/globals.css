@@ -3,7 +3,18 @@
 @tailwind utilities;
 
 body {
-	@apply bg-black text-slate-100;
+	@apply bg-black text-slate-100 !important;
 	
 	overscroll-behavior: none;
+}
+
+.mantine-Modal-content,
+.mantine-Modal-header,
+.mantine-Modal-body {
+	@apply bg-black text-slate-100 !important;
+	border-color: black;
+}
+
+.mantine-Modal-overlay {
+	background-color: rgba(148, 163, 184, 0.5) /* slate-400 with 50% opacity */;
 }

@@ -13,6 +13,7 @@ import Image from "next/image";
 import { Popover } from "@mantine/core";
 import { useState } from "react";
 import { useClickOutside } from "@mantine/hooks";
+import Link from "next/link";
 
 const UserInfo = () => {
   const { user } = useUser();
@@ -21,7 +22,7 @@ const UserInfo = () => {
   const [opened, setOpened] = useState(false);
   const ref = useClickOutside(() => setOpened(false));
 
-  if (!user) return null;
+  if (!user || !user.username) return null;
 
   return (
     <Popover
@@ -47,7 +48,7 @@ const UserInfo = () => {
         </div>
       </Popover.Target>
       <Popover.Dropdown className="border-slate-400 bg-black p-0 py-2">
-        <ol ref={ref}>
+        <ol ref={ref} onClick={() => setOpened(false)}>
           <li
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onClick={() => signOut()}
@@ -55,6 +56,11 @@ const UserInfo = () => {
           >
             Sign out
           </li>
+          <Link href={`/@${user.username}`}>
+            <li className="cursor-pointer p-2 transition hover:bg-slate-600">
+              Profile
+            </li>
+          </Link>
         </ol>
       </Popover.Dropdown>
     </Popover>
