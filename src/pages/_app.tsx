@@ -71,7 +71,11 @@ const Navigation = () => {
         {router.pathname === "/" ? (
           <span className="text-lg font-bold">Home</span>
         ) : (
-          <button type="button" onClick={() => router.back()}>
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="rounded-full transition hover:bg-slate-800"
+          >
             <BsArrowLeftShort size="2.25rem" />
           </button>
         )}
