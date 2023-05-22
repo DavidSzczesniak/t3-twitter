@@ -1,5 +1,9 @@
 import { clerkClient } from "@clerk/nextjs/dist/api";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  privateProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 import * as z from "zod";
 import { TRPCError } from "@trpc/server";
 import { filterUserForClient } from "~/server/helpers/filterUserForClient";
@@ -20,5 +24,17 @@ export const profileRouter = createTRPCRouter({
       }
 
       return filterUserForClient(user);
+    }),
+  updateDisplayName: privateProcedure
+    .input(z.object({ displayName: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      await clerkClient.users.updateUser(ctx.userId, {
+        publicMetadata: { displayName: input.displayName },
+      });
+
+      return {
+        success: true,
+        message: "successfully updated user display name",
+      };
     }),
 });

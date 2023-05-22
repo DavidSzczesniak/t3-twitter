@@ -6,19 +6,65 @@ import { PageLayout } from "~/components/layout";
 import { LoadingPage } from "~/components/loading";
 import { PostView } from "~/components/postview";
 import { generateSSGHelper } from "~/server/helpers/serverHelper";
-import { Modal } from "@mantine/core";
-import { useState } from "react";
+import { Modal, TextInput } from "@mantine/core";
+import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
+import { Controller, type SubmitHandler, useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 
 interface EditModalProps {
   opened: boolean;
   onClose: () => void;
 }
 
+type Inputs = {
+  displayName: string;
+};
+
 const EditModal = ({ opened, onClose }: EditModalProps) => {
+  const { handleSubmit, control, setValue } = useForm<Inputs>({
+    defaultValues: { displayName: "" },
+  });
+
+  const { user } = useUser();
+  useEffect(() => {
+    // not the best, will do for now
+    if (user)
+      setValue("displayName", user.publicMetadata.displayName as string);
+  }, [user, setValue]);
+
+  const { mutate } = api.profile.updateDisplayName.useMutation();
+
+  const router = useRouter();
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    mutate({ ...data });
+    router.reload();
+  };
+
   return (
     <Modal opened={opened} onClose={onClose} radius="lg" title="Edit Profile">
-      test
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Controller
+          control={control}
+          name="displayName"
+          render={({ field: { onChange, value, name } }) => (
+            <TextInput
+              onChange={onChange}
+              value={value}
+              name={name}
+              label="Display Name"
+            />
+          )}
+        />
+        <div className="flex w-full justify-end pt-4">
+          <button
+            type="submit"
+            className="h-fit rounded-full border border-slate-400 p-2 px-4 font-bold transition hover:bg-slate-800"
+          >
+            Save
+          </button>
+        </div>
+      </form>
     </Modal>
   );
 };
@@ -52,6 +98,8 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
 
   if (!data) return <div>Something went wrong</div>;
 
+  const displayName = data.displayName || data.username;
+
   return (
     <>
       <Head>
@@ -82,7 +130,8 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
             </button>
           )}
         </div>
-        <div className="p-4 text-2xl font-bold">{`@${
+        <div className="px-4 pt-4 text-2xl font-bold">{displayName}</div>
+        <div className="px-4 pb-4 text-slate-400">{`@${
           data.username ?? ""
         }`}</div>
         <div className="w-full border-b border-slate-400"></div>
