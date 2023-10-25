@@ -37,7 +37,8 @@ const PostContent = ({ data, isPostPage = false }: PostContentProps) => {
       <div className="flex flex-col">
         <div className="flex text-slate-300">
           <Link href={`/@${author.username}`}>
-            <span>{`@${author.username}`}</span>
+            <span className="mr-2">{author.displayName}</span>
+            <span className="text-slate-400">{`@${author.username}`}</span>
           </Link>
           <span className="px-2 text-slate-400">·</span>
           <Link href={`/post/${post.id}`}>

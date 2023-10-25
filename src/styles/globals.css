@@ -8,17 +8,53 @@ body {
 	overscroll-behavior: none;
 }
 
+:root {
+	--tw-slate-hover: rgba(148, 163, 184, 0.5);
+}
+
+/* Mantine overrides */
 .mantine-Modal-content,
 .mantine-Modal-header,
-.mantine-Modal-body {
+.mantine-Modal-body,
+.mantine-TextInput-input,
+.mantine-Textarea-input {
 	@apply bg-black text-slate-100 !important;
 	border-color: black;
+}
+
+.mantine-Modal-header > h2 {
+	font-size: 1.2rem;
+	font-weight: 700;
+}
+
+.mantine-Modal-close {
+	border-radius: 50%;
+	color: white;
+}
+
+.mantine-Modal-close:hover {
+	background-color: var(--tw-slate-hover);
+}
+
+.mantine-Modal-close {
+	height: 2rem;
+	width: 2rem;
+}
+
+.mantine-Modal-close > svg {
+	height: 1.5rem;
+	width: 1.5rem;
 }
 
 .mantine-Modal-body label {
 	@apply text-slate-400;
 }
 
+.mantine-TextInput-input,
+.mantine-Textarea-input {
+	border-color: rgba(148, 163, 184);
+}
+
 .mantine-Modal-overlay {
-	background-color: rgba(148, 163, 184, 0.5) /* slate-400 with 50% opacity */;
+	background-color: var(--tw-slate-hover);
 }

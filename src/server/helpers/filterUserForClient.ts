@@ -6,5 +6,7 @@ export const filterUserForClient = (user: User) => {
     username: user.username,
     profileImageUrl: user.profileImageUrl,
     displayName: user.publicMetadata.displayName as string,
+    bio: user.publicMetadata.bio as string,
+    location: user.publicMetadata.location as string,
   };
 };

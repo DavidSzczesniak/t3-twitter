@@ -25,11 +25,17 @@ export const profileRouter = createTRPCRouter({
 
       return filterUserForClient(user);
     }),
-  updateDisplayName: privateProcedure
-    .input(z.object({ displayName: z.string() }))
+  updateProfile: privateProcedure
+    .input(
+      z.object({
+        displayName: z.string(),
+        bio: z.string().optional(),
+        location: z.string().optional(),
+      })
+    )
     .mutation(async ({ input, ctx }) => {
       await clerkClient.users.updateUser(ctx.userId, {
-        publicMetadata: { displayName: input.displayName },
+        publicMetadata: { ...input },
       });
 
       return {

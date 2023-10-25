@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { BsArrowLeftShort } from "react-icons/bs";
+import { HiOutlineHome } from "react-icons/hi";
 import Image from "next/image";
 import { Popover } from "@mantine/core";
 import { useState } from "react";
@@ -76,13 +77,22 @@ const Navigation = () => {
         {router.pathname === "/" ? (
           <span className="text-lg font-bold">Home</span>
         ) : (
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="rounded-full transition hover:bg-slate-800"
-          >
-            <BsArrowLeftShort size="2.25rem" />
-          </button>
+          <div className="flex">
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="rounded-full transition hover:bg-slate-800"
+            >
+              <BsArrowLeftShort size="2.25rem" />
+            </button>
+            <button
+              type="button"
+              onClick={() => router.push("/")}
+              className="ml-3 rounded-full p-2 transition hover:bg-slate-800"
+            >
+              <HiOutlineHome size="1.5rem" />
+            </button>
+          </div>
         )}
         <UserInfo />
         {!isSignedIn && <SignInButton />}

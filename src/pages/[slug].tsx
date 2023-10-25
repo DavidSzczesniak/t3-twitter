@@ -6,11 +6,12 @@ import { PageLayout } from "~/components/layout";
 import { LoadingPage } from "~/components/loading";
 import { PostView } from "~/components/postview";
 import { generateSSGHelper } from "~/server/helpers/serverHelper";
-import { Modal, TextInput } from "@mantine/core";
+import { Modal, TextInput, Textarea } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { Controller, type SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+import { HiOutlineLocationMarker } from "react-icons/hi";
 
 interface EditModalProps {
   opened: boolean;
@@ -19,21 +20,26 @@ interface EditModalProps {
 
 type Inputs = {
   displayName: string;
+  bio: string;
+  location: string;
 };
 
 const EditModal = ({ opened, onClose }: EditModalProps) => {
   const { handleSubmit, control, setValue } = useForm<Inputs>({
-    defaultValues: { displayName: "" },
+    defaultValues: { displayName: "", bio: "", location: "" },
   });
 
   const { user } = useUser();
   useEffect(() => {
     // not the best, will do for now
-    if (user)
+    if (user) {
       setValue("displayName", user.publicMetadata.displayName as string);
+      setValue("bio", user.publicMetadata.bio as string);
+      setValue("location", user.publicMetadata.location as string);
+    }
   }, [user, setValue]);
 
-  const { mutate } = api.profile.updateDisplayName.useMutation();
+  const { mutate } = api.profile.updateProfile.useMutation();
 
   const router = useRouter();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
@@ -52,7 +58,38 @@ const EditModal = ({ opened, onClose }: EditModalProps) => {
               onChange={onChange}
               value={value}
               name={name}
-              label="Display Name"
+              label="Name"
+              className="mb-3"
+              withAsterisk
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="bio"
+          render={({ field: { onChange, value, name } }) => (
+            <Textarea
+              onChange={onChange}
+              value={value}
+              name={name}
+              label="Bio"
+              className="mb-3"
+              autosize
+              minRows={2}
+              maxRows={4}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="location"
+          render={({ field: { onChange, value, name } }) => (
+            <TextInput
+              onChange={onChange}
+              value={value}
+              name={name}
+              label="Location"
+              className="mb-3"
             />
           )}
         />
@@ -134,6 +171,13 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
         <div className="px-4 pb-4 text-slate-400">{`@${
           data.username ?? ""
         }`}</div>
+        {data.bio && <div className="px-4 pb-4">{data.bio}</div>}
+        {data.location && (
+          <div className="flex items-center px-4 pb-4 text-slate-400">
+            <HiOutlineLocationMarker size={"1.2rem"} className="mr-2 inline" />
+            {data.location}
+          </div>
+        )}
         <div className="w-full border-b border-slate-400"></div>
         <ProfileFeed userId={data.id} />
       </PageLayout>
